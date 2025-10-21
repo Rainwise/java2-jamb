@@ -1,0 +1,32 @@
+.table-view.score-table {
+    -fx-background-color: transparent;
+    -fx-border-color: #2e2e2e;
+    -fx-border-width: 1;
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+    -fx-font-size: 13px;
+}
+
+.table-view.score-table .column-header {
+    -fx-background-color: linear-gradient(to bottom, #4a90e2, #357abd);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view.score-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: #e0e0e0;
+}
+
+.table-view.score-table .table-row-cell:filled:selected,
+.table-view.score-table .table-row-cell:hover {
+    -fx-background-color: #e6f0ff;
+}
+
+.table-cell {
+    -fx-alignment: CENTER;
+    -fx-padding: 4 6 4 6;
+}
+
+.scoreTable.css {
+}

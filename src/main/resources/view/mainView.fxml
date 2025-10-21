@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hr.ipicek.jamb.controller.MainController">
+    <top>
+        <ToolBar>
+            <Label text="Igrač:"/>
+            <Label fx:id="lblPlayer"/>
+            <Separator/>
+            <Label text="Bacanja:"/>
+            <Label fx:id="lblRolls"/>
+            <Button fx:id="btnRoll" text="Bacaj"/>
+        </ToolBar>
+    </top>
+    <center>
+        <HBox spacing="12" alignment="CENTER">
+            <ToggleButton fx:id="die1"/>
+            <ToggleButton fx:id="die2"/>
+            <ToggleButton fx:id="die3"/>
+            <ToggleButton fx:id="die4"/>
+            <ToggleButton fx:id="die5"/>
+        </HBox>
+    </center>
+    <right>
+        <TableView fx:id="tblScores" prefWidth="420" styleClass="scoreTable.css">
+            <columns>
+                <TableColumn text="Kategorija" fx:id="colCat" prefWidth="150"/>
+                <TableColumn text="Igrač 1" fx:id="colP1" prefWidth="120"/>
+                <TableColumn text="Igrač 2" fx:id="colP2" prefWidth="120"/>
+            </columns>
+        </TableView>
+    </right>
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 8;">
+            <Label text="Ukupno:"/>
+            <Label fx:id="lblTotal"/>
+        </HBox>
+    </bottom>
+</BorderPane>
