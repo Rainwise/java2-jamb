@@ -19,6 +19,8 @@ public class GameEngine {
 
     private final ObservableList<StringProperty> diceImagePaths = FXCollections.observableArrayList();
 
+    private final BooleanProperty gameOver = new SimpleBooleanProperty(false);
+
     public GameEngine(List<String> playerNames) {
         if (playerNames == null || playerNames.size() != NUM_PLAYERS)
             throw new IllegalArgumentException("Igra mora imati točno 2 igrača.");
@@ -54,6 +56,13 @@ public class GameEngine {
         rollCount.set(rollCount.get() + 1);
     }
 
+    private boolean isGameFinished() {
+        for (Player p : players) {
+            if (!p.getSheet().isFull()) return false;
+        }
+        return true;
+    }
+
     public int previewScore(ScoreCategory category) {
         return ScoreCalculator.calculate(category, diceSet);
     }
@@ -66,6 +75,11 @@ public class GameEngine {
 
         int score = previewScore(category);
         sheet.setScore(category, score);
+
+        if (isGameFinished()) {
+            gameOver.set(true);
+            return;
+        }
 
         nextPlayer();
     }
@@ -104,5 +118,13 @@ public class GameEngine {
 
     public IntegerProperty rollCountProperty() {
         return rollCount;
+    }
+
+    public BooleanProperty gameOverProperty() {
+        return gameOver;
+    }
+
+    public boolean isGameOver() {
+        return gameOver.get();
     }
 }

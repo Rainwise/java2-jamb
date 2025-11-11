@@ -1,6 +1,7 @@
 package hr.ipicek.jamb.controller;
 
 import hr.ipicek.jamb.model.*;
+import hr.ipicek.jamb.util.DialogUtils;
 import hr.ipicek.jamb.util.TableUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -51,6 +52,11 @@ public class MainController {
         refreshScoreTable();
 
         engine.currentPlayerIndexProperty().addListener((obs, oldVal, newVal) -> refreshScoreTable());
+        engine.gameOverProperty().addListener((obs, wasOver, isNowOver) -> {
+            if (isNowOver) {
+                DialogUtils.announceWinner(engine);
+            }
+        });
     }
 
     private void bindDie(ImageView img, Die die, StringProperty imagePath) {
@@ -77,7 +83,7 @@ public class MainController {
         });
     }
 
-    //Test
+
     private void updateImage(ImageView img, String path) {
         var url = getClass().getResource(path);
         if (url != null) {

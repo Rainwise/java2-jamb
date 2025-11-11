@@ -26,6 +26,24 @@ public class DialogUtils {
         }
     }
 
+    public static void announceWinner(GameEngine engine) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Kraj igre!");
+        var players = engine.getPlayers();
+        var p1 = players.get(0);
+        var p2 = players.get(1);
+
+        int score1 = p1.getSheet().total();
+        int score2 = p2.getSheet().total();
+        if (score1 > score2)
+            alert.setContentText(p1.getName() + " je pobijedio sa " + score1 + " bodova!");
+        else if (score2 > score1)
+            alert.setContentText(p2.getName() + " je pobijedio a " + score2 + " bodova!");
+        else
+            alert.setContentText("Neriješeno! Oba igrača imaju " + score1 + " bodova.");
+        alert.showAndWait();
+    }
+
     private static Alert getAlert(ScoreCategory category, int rolls, int potentialScore) {
         var alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Upis rezultata");

@@ -36,6 +36,13 @@ public class ScoreSheet {
         filled.get(category).set(true);
     }
 
+    public boolean isFull() {
+        for (ScoreCategory c : ScoreCategory.values()) {
+            if (!filledProperty(c).get()) return false;
+        }
+        return true;
+    }
+
     // For restart
     public void reset() {
         for (ScoreCategory c : ScoreCategory.values()) {
