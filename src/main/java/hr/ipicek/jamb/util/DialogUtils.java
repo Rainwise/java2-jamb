@@ -38,7 +38,7 @@ public class DialogUtils {
             );
         } else {
             alert.setContentText(
-                    "Upisat ćeš " + potentialScore + " bodova u polje " + category.name() +
+                    "Upisat ćeš " + potentialScore + " bodova u polje " + category.displayName() +
                             ".\nIskoristio si sva bacanja.\n\nŽeliš li potvrditi unos?"
             );
         }

@@ -7,44 +7,82 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class MainController {
 
-    @FXML private Label lblPlayer, lblRolls, lblTotal;
+    @FXML private Label lblPlayer;
+    @FXML private Label lblRolls;
+    @FXML private Label lblTotal;
     @FXML private Button btnRoll;
-    @FXML private ToggleButton die1, die2, die3, die4, die5;
     @FXML private TableView<Row> tblScores;
     @FXML private TableColumn<Row, String> colCat;
     @FXML private TableColumn<Row, Number> colP1;
     @FXML private TableColumn<Row, Number> colP2;
+    @FXML private ImageView imgDie1;
+    @FXML private ImageView imgDie2;
+    @FXML private ImageView imgDie3;
+    @FXML private ImageView imgDie4;
+    @FXML private ImageView imgDie5;
 
     private GameEngine engine;
 
     public void init(GameEngine engine) {
         this.engine = engine;
 
-        // Header bindings
         lblPlayer.textProperty().bind(Bindings.createStringBinding(
                 () -> engine.getCurrentPlayer().getName(),
                 engine.currentPlayerIndexProperty()));
         lblRolls.textProperty().bind(engine.rollCountProperty().asString());
         btnRoll.disableProperty().bind(engine.rollCountProperty().greaterThanOrEqualTo(GameEngine.MAX_ROLLS));
 
-        // Dice bindings
-        var dice = engine.getDiceSet().getDice();
-        bindDieButton(die1, dice.get(0));
-        bindDieButton(die2, dice.get(1));
-        bindDieButton(die3, dice.get(2));
-        bindDieButton(die4, dice.get(3));
-        bindDieButton(die5, dice.get(4));
-
         btnRoll.setOnAction(e -> engine.roll());
 
-        // Build table
+        var dice = engine.getDiceSet().getDice();
+        var diceImages = engine.getDiceImagePaths();
+
+        bindDie(imgDie1, dice.get(0), diceImages.get(0));
+        bindDie(imgDie2, dice.get(1), diceImages.get(1));
+        bindDie(imgDie3, dice.get(2), diceImages.get(2));
+        bindDie(imgDie4, dice.get(3), diceImages.get(3));
+        bindDie(imgDie5, dice.get(4), diceImages.get(4));
+
         refreshScoreTable();
 
-        // Auto refresh when player changes
         engine.currentPlayerIndexProperty().addListener((obs, oldVal, newVal) -> refreshScoreTable());
+    }
+
+    private void bindDie(ImageView img, Die die, StringProperty imagePath) {
+        img.setFitWidth(72);
+        img.setFitHeight(72);
+        img.setPreserveRatio(true);
+        imagePath.addListener((obs, old, newPath) -> updateImage(img, newPath));
+        updateImage(img, imagePath.get());
+
+        die.heldProperty().addListener((obs, oldVal, held) ->
+                img.setOpacity(Boolean.TRUE.equals(held) ? 0.6 : 1.0)
+        );
+        img.setOpacity(die.heldProperty().get() ? 0.6 : 1.0);
+
+        img.setOnMouseClicked(e -> die.heldProperty().set(!die.heldProperty().get()));
+
+        img.setOnMouseEntered(e -> {
+            img.setScaleX(1.08);
+            img.setScaleY(1.08);
+        });
+        img.setOnMouseExited(e -> {
+            img.setScaleX(1.0);
+            img.setScaleY(1.0);
+        });
+    }
+
+    //Test
+    private void updateImage(ImageView img, String path) {
+        var url = getClass().getResource(path);
+        if (url != null) {
+            img.setImage(new Image(url.toExternalForm()));
+        }
     }
 
     private void refreshScoreTable() {
@@ -56,17 +94,15 @@ public class MainController {
         for (var c : ScoreCategory.values()) {
             rows.add(new Row(c, p1, p2));
         }
-        tblScores.setItems(rows);
 
+        tblScores.setItems(rows);
         colCat.setCellValueFactory(data -> data.getValue().nameProperty());
         colP1.setCellValueFactory(data -> data.getValue().score1Property());
         colP2.setCellValueFactory(data -> data.getValue().score2Property());
 
-        // Set up player columns with click + style logic
         TableUtils.setupPlayerColumn(tblScores, colP1, engine, 0);
         TableUtils.setupPlayerColumn(tblScores, colP2, engine, 1);
 
-        // Update total label dynamically
         var sheet = engine.getCurrentPlayer().getSheet();
         lblTotal.textProperty().bind(Bindings.createStringBinding(
                 () -> String.valueOf(sheet.total()),
@@ -87,12 +123,6 @@ public class MainController {
         ));
     }
 
-    private void bindDieButton(ToggleButton btn, Die die) {
-        btn.textProperty().bind(die.valueProperty().asString());
-        btn.selectedProperty().bindBidirectional(die.heldProperty());
-    }
-
-    // Row class for the TableView
     public static class Row {
         private final ScoreCategory category;
         private final StringProperty name;

@@ -2,6 +2,8 @@ package hr.ipicek.jamb.model;
 
 import hr.ipicek.jamb.util.ScoreCalculator;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.util.*;
 
 public class GameEngine {
@@ -15,14 +17,35 @@ public class GameEngine {
     private final IntegerProperty rollCount = new SimpleIntegerProperty(0);
     private final IntegerProperty currentPlayerIndex = new SimpleIntegerProperty(0);
 
+    private final ObservableList<StringProperty> diceImagePaths = FXCollections.observableArrayList();
+
     public GameEngine(List<String> playerNames) {
         if (playerNames == null || playerNames.size() != NUM_PLAYERS)
-            throw new IllegalArgumentException("Igra mora imati 2 igrača.");
+            throw new IllegalArgumentException("Igra mora imati točno 2 igrača.");
 
-        players = new ArrayList<>();
-        for (String name : playerNames) players.add(new Player(name));
+        this.players = new ArrayList<>();
+        playerNames.forEach(name -> players.add(new Player(name)));
 
+        initDiceImageBindings();
         nextTurn();
+    }
+
+    private void initDiceImageBindings() {
+        for (Die die : diceSet.getDice()) {
+            StringProperty imagePath = new SimpleStringProperty(getDiceImagePath(die.getValue()));
+            die.valueProperty().addListener((obs, oldVal, newVal) ->
+                    imagePath.set(getDiceImagePath(newVal.intValue()))
+            );
+            diceImagePaths.add(imagePath);
+        }
+    }
+
+    private String getDiceImagePath(int value) {
+        return "/images/dice" + value + ".png";
+    }
+
+    public ObservableList<StringProperty> getDiceImagePaths() {
+        return diceImagePaths;
     }
 
     public void roll() {
@@ -59,15 +82,27 @@ public class GameEngine {
         roll();
     }
 
-    public List<Player> getPlayers() { return players; }
+    public List<Player> getPlayers() {
+        return players;
+    }
 
-    public Player getCurrentPlayer() { return players.get(currentPlayerIndex.get()); }
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex.get());
+    }
 
-    public DiceSet getDiceSet() { return diceSet; }
+    public DiceSet getDiceSet() {
+        return diceSet;
+    }
 
-    public int getCurrentPlayerIndex() { return currentPlayerIndex.get(); }
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex.get();
+    }
 
-    public IntegerProperty currentPlayerIndexProperty() { return currentPlayerIndex; }
+    public IntegerProperty currentPlayerIndexProperty() {
+        return currentPlayerIndex;
+    }
 
-    public IntegerProperty rollCountProperty() { return rollCount; }
+    public IntegerProperty rollCountProperty() {
+        return rollCount;
+    }
 }

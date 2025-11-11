@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hr.ipicek.jamb.controller.MainController">
     <top>
@@ -14,12 +15,12 @@
         </ToolBar>
     </top>
     <center>
-        <HBox spacing="12" alignment="CENTER">
-            <ToggleButton fx:id="die1"/>
-            <ToggleButton fx:id="die2"/>
-            <ToggleButton fx:id="die3"/>
-            <ToggleButton fx:id="die4"/>
-            <ToggleButton fx:id="die5"/>
+        <HBox fx:id="diceBox" spacing="16" alignment="CENTER">
+            <ImageView fx:id="imgDie1" />
+            <ImageView fx:id="imgDie2" />
+            <ImageView fx:id="imgDie3" />
+            <ImageView fx:id="imgDie4" />
+            <ImageView fx:id="imgDie5" />
         </HBox>
     </center>
     <right>
