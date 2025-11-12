@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.Optional;
 
-public class DialogUtils {
+public final class DialogUtils {
 
     private DialogUtils() {}
 

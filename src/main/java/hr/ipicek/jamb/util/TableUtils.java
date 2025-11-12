@@ -4,7 +4,7 @@ import hr.ipicek.jamb.controller.MainController.Row;
 import hr.ipicek.jamb.model.GameEngine;
 import javafx.scene.control.*;
 
-public class TableUtils {
+public final class TableUtils {
 
     private TableUtils() {}
 

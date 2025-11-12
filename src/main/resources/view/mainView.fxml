@@ -16,7 +16,7 @@
         </ToolBar>
     </top>
     <center>
-        <HBox fx:id="diceBox" spacing="16" alignment="CENTER">
+        <HBox spacing="16" alignment="CENTER">
             <ImageView fx:id="imgDie1" />
             <ImageView fx:id="imgDie2" />
             <ImageView fx:id="imgDie3" />

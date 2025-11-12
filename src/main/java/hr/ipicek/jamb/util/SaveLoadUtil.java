@@ -4,7 +4,7 @@ import hr.ipicek.jamb.model.GameEngine;
 import javafx.stage.Stage;
 import java.io.*;
 
-public class SaveLoadUtil {
+public final class SaveLoadUtil {
 
     private SaveLoadUtil() {
     }

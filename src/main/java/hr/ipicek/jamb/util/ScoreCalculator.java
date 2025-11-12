@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class ScoreCalculator {
+public final class ScoreCalculator {
 
     private ScoreCalculator() {}
 

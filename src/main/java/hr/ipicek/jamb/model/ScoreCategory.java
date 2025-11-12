@@ -1,8 +1,5 @@
 package hr.ipicek.jamb.model;
 
-import java.io.Serializable;
-import java.util.Map;
-
 public enum ScoreCategory {
     ONES("Jedinice"),
     TWOS("Dvojke"),
