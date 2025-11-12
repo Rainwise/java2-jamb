@@ -28,14 +28,9 @@ public class DiceSet {
     }
 
     public List<Integer> getDiceValues() {
-        return dice.stream().map(Die::getValue).collect(Collectors.toList());
+        return dice.stream()
+                .map(Die::getValue)
+                .collect(Collectors.toList());
     }
 
-    // Full game restart
-    public void resetAll() {
-        dice.forEach(d -> {
-            d.setHeld(false);
-            d.roll();
-        });
-    }
 }

@@ -12,6 +12,7 @@
             <Label text="Bacanja:"/>
             <Label fx:id="lblRolls"/>
             <Button fx:id="btnRoll" text="Bacaj"/>
+            <Button fx:id="btnSaveGame" text="💾 Spremi igru" />
         </ToolBar>
     </top>
     <center>

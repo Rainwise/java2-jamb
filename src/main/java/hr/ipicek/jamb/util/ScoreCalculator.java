@@ -8,36 +8,29 @@ import java.util.stream.Collectors;
 
 public class ScoreCalculator {
 
+    private ScoreCalculator() {}
+
     public static int calculate(ScoreCategory category, DiceSet diceSet) {
         var values = diceSet.getDiceValues();
         Map<Integer, Long> counts = values.stream()
                 .collect(Collectors.groupingBy(v -> v, Collectors.counting()));
 
-        switch (category) {
-            case ONES: return sumOf(values, 1);
-            case TWOS: return sumOf(values, 2);
-            case THREES: return sumOf(values, 3);
-            case FOURS: return sumOf(values, 4);
-            case FIVES: return sumOf(values, 5);
-            case SIXES: return sumOf(values, 6);
-
-            case THREE_OF_A_KIND:
-                return hasOfAKind(counts, 3) ? sum(values) : 0;
-            case FOUR_OF_A_KIND:
-                return hasOfAKind(counts, 4) ? sum(values) : 0;
-            case FULL_HOUSE:
-                return counts.containsValue(3L) && counts.containsValue(2L) ? 25 : 0;
-            case SMALL_STRAIGHT:
-                return hasStraight(values, 4) ? 30 : 0;
-            case LARGE_STRAIGHT:
-                return hasStraight(values, 5) ? 40 : 0;
-            case YAHTZEE:
-                return hasOfAKind(counts, 5) ? 50 : 0;
-            case CHANCE:
-                return sum(values);
-            default:
-                return 0;
-        }
+        return switch (category) {
+            case ONES -> sumOf(values, 1);
+            case TWOS -> sumOf(values, 2);
+            case THREES -> sumOf(values, 3);
+            case FOURS -> sumOf(values, 4);
+            case FIVES -> sumOf(values, 5);
+            case SIXES -> sumOf(values, 6);
+            case THREE_OF_A_KIND -> hasOfAKind(counts, 3) ? sum(values) : 0;
+            case FOUR_OF_A_KIND -> hasOfAKind(counts, 4) ? sum(values) : 0;
+            case FULL_HOUSE -> counts.containsValue(3L) && counts.containsValue(2L) ? sum(values) : 0;
+            case SMALL_STRAIGHT -> hasStraight(values, 4) ? 30 : 0;
+            case LARGE_STRAIGHT -> hasStraight(values, 5) ? 40 : 0;
+            case YAHTZEE -> hasOfAKind(counts, 5) ? 50 : 0;
+            case CHANCE -> sum(values);
+            default -> 0;
+        };
     }
 
     private static int sumOf(List<Integer> values, int target) {

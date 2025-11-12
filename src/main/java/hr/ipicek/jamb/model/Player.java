@@ -1,36 +1,18 @@
 package hr.ipicek.jamb.model;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import java.io.Serial;
+import java.io.Serializable;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Player {
 
-    private final StringProperty name = new SimpleStringProperty();
-    private final ScoreSheet sheet = new ScoreSheet();
-
-    // Computed property (binds to sheet total)
-    private final ReadOnlyIntegerWrapper totalScore = new ReadOnlyIntegerWrapper();
+    private final StringProperty name;
+    private final ScoreSheet sheet;
 
     public Player(String name) {
-        this.name.set(name);
-
-        // Bind totalScore dynamically to sheet total
-        totalScore.bind(Bindings.createIntegerBinding(
-                sheet::total,
-                sheet.scoreProperty(ScoreCategory.ONES),
-                sheet.scoreProperty(ScoreCategory.TWOS),
-                sheet.scoreProperty(ScoreCategory.THREES),
-                sheet.scoreProperty(ScoreCategory.FOURS),
-                sheet.scoreProperty(ScoreCategory.FIVES),
-                sheet.scoreProperty(ScoreCategory.SIXES),
-                sheet.scoreProperty(ScoreCategory.THREE_OF_A_KIND),
-                sheet.scoreProperty(ScoreCategory.FOUR_OF_A_KIND),
-                sheet.scoreProperty(ScoreCategory.FULL_HOUSE),
-                sheet.scoreProperty(ScoreCategory.SMALL_STRAIGHT),
-                sheet.scoreProperty(ScoreCategory.LARGE_STRAIGHT),
-                sheet.scoreProperty(ScoreCategory.YAHTZEE),
-                sheet.scoreProperty(ScoreCategory.CHANCE)
-        ));
+        this.name = new SimpleStringProperty(name);
+        this.sheet = new ScoreSheet();
     }
 
     public String getName() {
@@ -41,12 +23,24 @@ public class Player {
         return sheet;
     }
 
-    public int getTotalScore() {
-        return totalScore.get();
+    public PlayerState toSerializableState() {
+        return new PlayerState(name.get(), sheet.toSerializableState());
+    }
+
+    public static Player fromSerializableState(PlayerState state) {
+        Player p = new Player(state.name);
+        p.getSheet().loadFromSerializableState(state.sheetState);
+        return p;
+    }
+
+    public record PlayerState(String name, ScoreSheet.SheetState sheetState) implements Serializable {
+            @Serial
+            private static final long serialVersionUID = 1L;
+
     }
 
     @Override
     public String toString() {
-        return getName() + " (" + getTotalScore() + " pts)";
+        return name.get() + " (" + sheet.total() + " pts)";
     }
 }

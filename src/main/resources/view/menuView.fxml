@@ -14,6 +14,7 @@
             <Label text="🎲 JAMB" style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
             <Button fx:id="btnNewGame" text="Nova igra" prefWidth="180"  prefHeight="30" styleClass="menu-button"/>
             <Button fx:id="btnLoadGame" text="Učitaj prijašnju igru" prefWidth="180" prefHeight="30" styleClass="menu-button"/>
+            <Button fx:id="btnSettings" text="⚙️ Postavke" prefWidth="180" prefHeight="30" styleClass="menu-button"/>
             <Button fx:id="btnExit" text="Izlaz" prefWidth="180" prefHeight="30" styleClass="menu-button"/>
         </VBox>
     </center>

@@ -1,17 +1,29 @@
 .menu-root {
-    -fx-background-color: linear-gradient(to bottom, #3b5998, #192f6a);
+    -fx-background-color: linear-gradient(to bottom right, #2b5876, #4e4376);
+}
+
+.menu-title {
+    -fx-font-size: 32px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 6, 0, 2, 2);
 }
 
 .menu-button {
-    -fx-font-size: 14px;
-    -fx-background-color: #f5f5f5;
-    -fx-border-radius: 6;
-    -fx-background-radius: 6;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-font-size: 18px;
     -fx-text-fill: #333;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 3, 0, 1, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 1, 1);
+    -fx-transition: 0.3s;
 }
 
 .menu-button:hover {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: #ffcc00;
+    -fx-text-fill: #222;
+}
+
+.menu-button:pressed {
+    -fx-background-color: #ffaa00;
+    -fx-text-fill: black;
 }

@@ -4,6 +4,9 @@ import hr.ipicek.jamb.util.ScoreCalculator;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 public class GameEngine {
@@ -16,10 +19,9 @@ public class GameEngine {
 
     private final IntegerProperty rollCount = new SimpleIntegerProperty(0);
     private final IntegerProperty currentPlayerIndex = new SimpleIntegerProperty(0);
+    private final BooleanProperty gameOver = new SimpleBooleanProperty(false);
 
     private final ObservableList<StringProperty> diceImagePaths = FXCollections.observableArrayList();
-
-    private final BooleanProperty gameOver = new SimpleBooleanProperty(false);
 
     public GameEngine(List<String> playerNames) {
         if (playerNames == null || playerNames.size() != NUM_PLAYERS)
@@ -30,6 +32,18 @@ public class GameEngine {
 
         initDiceImageBindings();
         nextTurn();
+    }
+
+    private GameEngine(List<Player> restoredPlayers, List<Integer> diceValues, int rollCount, int currentPlayer) {
+        this.players = restoredPlayers;
+        initDiceImageBindings();
+
+        for (int i = 0; i < diceSet.getDice().size(); i++) {
+            diceSet.getDice().get(i).setValue(diceValues.get(i));
+        }
+
+        this.rollCount.set(rollCount);
+        this.currentPlayerIndex.set(currentPlayer);
     }
 
     private void initDiceImageBindings() {
@@ -55,6 +69,7 @@ public class GameEngine {
         diceSet.roll();
         rollCount.set(rollCount.get() + 1);
     }
+
 
     private boolean isGameFinished() {
         for (Player p : players) {
@@ -124,7 +139,36 @@ public class GameEngine {
         return gameOver;
     }
 
-    public boolean isGameOver() {
-        return gameOver.get();
+    public GameEngineState toSerializableState() {
+        List<Player.PlayerState> playerStates = new ArrayList<>();
+        for (Player p : players)
+            playerStates.add(p.toSerializableState());
+
+        List<Integer> diceValues = diceSet.getDiceValues();
+
+        return new GameEngineState(
+                playerStates,
+                diceValues,
+                rollCount.get(),
+                currentPlayerIndex.get()
+        );
+    }
+
+    public static GameEngine fromSerializableState(GameEngineState state) {
+        List<Player> restoredPlayers = new ArrayList<>();
+        for (Player.PlayerState ps : state.playerStates)
+            restoredPlayers.add(Player.fromSerializableState(ps));
+
+        return new GameEngine(
+                restoredPlayers,
+                state.diceValues,
+                state.rollCount,
+                state.currentPlayerIndex
+        );
+    }
+
+    public record GameEngineState(List<Player.PlayerState> playerStates, List<Integer> diceValues, int rollCount, int currentPlayerIndex) implements Serializable {
+            @Serial
+            private static final long serialVersionUID = 1L;
     }
 }

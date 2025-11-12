@@ -2,6 +2,7 @@ package hr.ipicek.jamb.controller;
 
 import hr.ipicek.jamb.model.*;
 import hr.ipicek.jamb.util.DialogUtils;
+import hr.ipicek.jamb.util.SaveLoadUtil;
 import hr.ipicek.jamb.util.TableUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class MainController {
 
@@ -17,6 +19,7 @@ public class MainController {
     @FXML private Label lblRolls;
     @FXML private Label lblTotal;
     @FXML private Button btnRoll;
+    @FXML private Button btnSaveGame;
     @FXML private TableView<Row> tblScores;
     @FXML private TableColumn<Row, String> colCat;
     @FXML private TableColumn<Row, Number> colP1;
@@ -37,8 +40,11 @@ public class MainController {
                 engine.currentPlayerIndexProperty()));
         lblRolls.textProperty().bind(engine.rollCountProperty().asString());
         btnRoll.disableProperty().bind(engine.rollCountProperty().greaterThanOrEqualTo(GameEngine.MAX_ROLLS));
-
         btnRoll.setOnAction(e -> engine.roll());
+        btnSaveGame.setOnAction(e -> {
+            Stage stage = (Stage) btnSaveGame.getScene().getWindow();
+            SaveLoadUtil.saveGameWithDialog(engine, stage);
+        });
 
         var dice = engine.getDiceSet().getDice();
         var diceImages = engine.getDiceImagePaths();
@@ -53,7 +59,7 @@ public class MainController {
 
         engine.currentPlayerIndexProperty().addListener((obs, oldVal, newVal) -> refreshScoreTable());
         engine.gameOverProperty().addListener((obs, wasOver, isNowOver) -> {
-            if (isNowOver) {
+            if (Boolean.TRUE.equals(isNowOver)) {
                 DialogUtils.announceWinner(engine);
             }
         });
@@ -106,8 +112,8 @@ public class MainController {
         colP1.setCellValueFactory(data -> data.getValue().score1Property());
         colP2.setCellValueFactory(data -> data.getValue().score2Property());
 
-        TableUtils.setupPlayerColumn(tblScores, colP1, engine, 0);
-        TableUtils.setupPlayerColumn(tblScores, colP2, engine, 1);
+        TableUtils.setupPlayerColumn(colP1, engine, 0);
+        TableUtils.setupPlayerColumn(colP2, engine, 1);
 
         var sheet = engine.getCurrentPlayer().getSheet();
         lblTotal.textProperty().bind(Bindings.createStringBinding(

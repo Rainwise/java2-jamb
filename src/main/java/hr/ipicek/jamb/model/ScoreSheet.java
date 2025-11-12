@@ -1,7 +1,11 @@
 package hr.ipicek.jamb.model;
 
 import javafx.beans.property.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.EnumMap;
+import java.util.Map;
 
 public class ScoreSheet {
 
@@ -43,14 +47,6 @@ public class ScoreSheet {
         return true;
     }
 
-    // For restart
-    public void reset() {
-        for (ScoreCategory c : ScoreCategory.values()) {
-            scores.get(c).set(0);
-            filled.get(c).set(false);
-        }
-    }
-
     public int total() {
         return scores.values().stream()
                 .mapToInt(IntegerProperty::get)
@@ -61,9 +57,39 @@ public class ScoreSheet {
     public String toString() {
         StringBuilder sb = new StringBuilder("ScoreSheet:\n");
         for (var c : ScoreCategory.values()) {
-            sb.append(String.format("  %-15s : %3d %s%n", c.name(), getScore(c), isFilled(c) ? "(✓)" : ""));
+            sb.append(String.format("  %-15s : %3d %s%n",
+                    c.name(), getScore(c), isFilled(c) ? "(✓)" : ""));
         }
         sb.append("Total: ").append(total());
         return sb.toString();
     }
+
+
+    public SheetState toSerializableState() {
+        var state = new EnumMap<ScoreCategory, SheetState.CategoryState>(ScoreCategory.class);
+        for (var c : ScoreCategory.values()) {
+            state.put(c, new SheetState.CategoryState(getScore(c), isFilled(c)));
+        }
+        return new SheetState(state);
+    }
+
+    public void loadFromSerializableState(SheetState saved) {
+        for (var c : ScoreCategory.values()) {
+            var catState = saved.categories.get(c);
+            if (catState != null) {
+                scores.get(c).set(catState.score);
+                filled.get(c).set(catState.filled);
+            }
+        }
+    }
+
+    public record SheetState(Map<ScoreCategory, CategoryState> categories) implements Serializable {
+            @Serial
+            private static final long serialVersionUID = 1L;
+
+        public record CategoryState(int score, boolean filled) implements Serializable {
+            @Serial
+            private static final long serialVersionUID = 1L;
+            }
+        }
 }

@@ -14,10 +14,14 @@ public class Die {
     private final BooleanProperty held = new SimpleBooleanProperty(this, "held", false);
 
     public void roll() {
-        if (!isHeld())
-        {
+        if (!isHeld()) {
             value.set(1 + RNG.nextInt(6));
-        } }
+        }
+    }
+
+    public void setValue(int value) {
+        this.value.set(value);
+    }
 
     public int getValue() {
         return value.get();
