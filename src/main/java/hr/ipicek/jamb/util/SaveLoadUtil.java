@@ -2,6 +2,7 @@ package hr.ipicek.jamb.util;
 
 import hr.ipicek.jamb.model.GameEngine;
 import javafx.stage.Stage;
+
 import java.io.*;
 
 public final class SaveLoadUtil {

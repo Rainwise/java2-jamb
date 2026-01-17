@@ -2,7 +2,8 @@ package hr.ipicek.jamb.util;
 
 import hr.ipicek.jamb.controller.MainController.Row;
 import hr.ipicek.jamb.model.GameEngine;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 
 public final class TableUtils {
 

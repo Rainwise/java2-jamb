@@ -1,14 +1,23 @@
 package hr.ipicek.jamb.controller;
 
-import hr.ipicek.jamb.model.*;
+import hr.ipicek.jamb.model.Die;
+import hr.ipicek.jamb.model.GameEngine;
+import hr.ipicek.jamb.model.Player;
+import hr.ipicek.jamb.model.ScoreCategory;
 import hr.ipicek.jamb.util.DialogUtils;
 import hr.ipicek.jamb.util.SaveLoadUtil;
 import hr.ipicek.jamb.util.TableUtils;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;

@@ -1,6 +1,9 @@
 package hr.ipicek.jamb.model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.io.Serial;
 import java.io.Serializable;

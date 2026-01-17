@@ -3,6 +3,8 @@ package hr.ipicek.jamb.controller;
 import hr.ipicek.jamb.model.GameEngine;
 import hr.ipicek.jamb.util.DialogUtils;
 import hr.ipicek.jamb.util.SaveLoadUtil;
+import hr.ipicek.jamb.util.SceneUtils;
+import hr.ipicek.jamb.util.ViewPaths;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +18,7 @@ import java.util.Objects;
 public class MenuController {
 
     @FXML private Button btnNewGame;
+    @FXML private Button btnNetworkGame;
     @FXML private Button btnLoadGame;
     @FXML private Button btnSettings;
     @FXML private Button btnExit;
@@ -26,6 +29,7 @@ public class MenuController {
     @FXML
     private void initialize() {
         btnNewGame.setOnAction(e -> startNewGame());
+        btnNetworkGame.setOnAction(e -> openNetworkLobby());
         btnLoadGame.setOnAction(e -> loadPreviousGame());
         btnSettings.setOnAction(e -> openSettings());
         btnExit.setOnAction(e -> System.exit(0));
@@ -33,21 +37,35 @@ public class MenuController {
 
     private void startNewGame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainView.fxml"));
-            Scene scene = new Scene(loader.load());
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/style/scoreTable.css")).toExternalForm()
-            );
+            FXMLLoader loader = SceneUtils.loadFXML(ViewPaths.MAIN_GAME);
 
             MainController controller = loader.getController();
             controller.init(new GameEngine(playerNames));
 
+            Scene scene = new Scene(loader.getRoot());
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource(ViewPaths.CSS_SCORE_TABLE)).toExternalForm()
+            );
+
             Stage stage = (Stage) btnNewGame.getScene().getWindow();
-            stage.setTitle("JAMB");
+            stage.setTitle(ViewPaths.TITLE_GAME);
             stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
             DialogUtils.showError(ERROR_TITLE, "Nije moguće pokrenuti novu igru.", ex);
+        }
+    }
+
+    private void openNetworkLobby() {
+        try {
+            SceneUtils.switchSceneWithCSS(
+                    btnNetworkGame,
+                    ViewPaths.NETWORK_LOBBY,
+                    "JAMB - Network Lobby",
+                    ViewPaths.CSS_MENU
+            );
+        } catch (IOException ex) {
+            DialogUtils.showError(ERROR_TITLE, "Nije moguće otvoriti mrežni lobby.", ex);
         }
     }
 

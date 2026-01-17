@@ -1,5 +1,7 @@
 package hr.ipicek.jamb.util;
-import hr.ipicek.jamb.model.*;
+
+import hr.ipicek.jamb.model.DiceSet;
+import hr.ipicek.jamb.model.ScoreCategory;
 
 import java.util.List;
 import java.util.Map;

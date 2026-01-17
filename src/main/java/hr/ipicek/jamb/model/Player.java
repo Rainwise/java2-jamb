@@ -1,9 +1,10 @@
 package hr.ipicek.jamb.model;
 
-import java.io.Serial;
-import java.io.Serializable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 public class Player {
 

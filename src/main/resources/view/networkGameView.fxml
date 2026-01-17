@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="hr.ipicek.jamb.controller.NetworkGameController"
+            stylesheets="@../style/scoreTable.css"
+            prefWidth="1000" prefHeight="700">
+
+    <!-- TOP - Game Info -->
+    <top>
+        <VBox spacing="5" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="MREŽNA IGRA" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="lblCurrentPlayer" text="Potez: Player 1"
+                       style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                <Label fx:id="lblYourTurn" text="★ VAŠ POTEZ ★"
+                       style="-fx-text-fill: #ffd700; -fx-font-size: 16px; -fx-font-weight: bold;"
+                       visible="false"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label fx:id="lblRolls" text="Bacanja: 0/3"
+                       style="-fx-text-fill: white; -fx-font-size: 12px;"/>
+
+                <Separator orientation="VERTICAL" prefHeight="15"/>
+
+                <Label fx:id="lblNetworkStatus" text="● Povezan"
+                       style="-fx-text-fill: #2ecc71; -fx-font-size: 12px;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER - Game + Chat -->
+    <center>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" bottom="10" left="10" right="10"/>
+            </padding>
+
+            <!-- LEFT - Game Area -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS">
+
+                <!-- Dice -->
+                <VBox spacing="10" alignment="CENTER">
+                    <Label text="KOCKICE" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="10" alignment="CENTER">
+                        <ImageView fx:id="imgDie1" fitWidth="72" fitHeight="72"/>
+                        <ImageView fx:id="imgDie2" fitWidth="72" fitHeight="72"/>
+                        <ImageView fx:id="imgDie3" fitWidth="72" fitHeight="72"/>
+                        <ImageView fx:id="imgDie4" fitWidth="72" fitHeight="72"/>
+                        <ImageView fx:id="imgDie5" fitWidth="72" fitHeight="72"/>
+                    </HBox>
+
+                    <Button fx:id="btnRoll" text="BACI KOCKICE"
+                            onAction="#handleRoll"
+                            styleClass="primary-button"
+                            prefWidth="200" prefHeight="40">
+                        <font>
+                            <Font size="14"/>
+                        </font>
+                    </Button>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Score Table -->
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+                    <Label text="TABLICA REZULTATA" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                    <TableView fx:id="tblScores" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colCategory" text="Kategorija" prefWidth="150"/>
+                            <TableColumn fx:id="colPlayer1" text="Player 1" prefWidth="100"/>
+                            <TableColumn fx:id="colPlayer2" text="Player 2" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+
+                    <HBox spacing="20" alignment="CENTER">
+                        <Label text="Ukupno:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <Label fx:id="lblTotal" text="0" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- RIGHT - Move Display & Chat Panel -->
+            <VBox spacing="10" prefWidth="280">
+
+                <!-- Move Display Panel -->
+                <VBox spacing="8"
+                      style="-fx-background-color: #3498db; -fx-background-radius: 5; -fx-padding: 10;">
+
+                    <Label text="📋 POSLJEDNJI POTEZ"
+                           style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+
+                    <Separator style="-fx-background-color: white;"/>
+
+                    <HBox spacing="5">
+                        <Label text="Igrač:"
+                               style="-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 50;"/>
+                        <Label fx:id="lblMovePlayer" text="---"
+                               style="-fx-text-fill: white;"/>
+                    </HBox>
+
+                    <HBox spacing="5">
+                        <Label text="Akcija:"
+                               style="-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 50;"/>
+                        <Label fx:id="lblMoveAction" text="Čekanje na potez..."
+                               style="-fx-text-fill: white;" wrapText="true" maxWidth="200"/>
+                    </HBox>
+
+                    <HBox spacing="5">
+                        <Label text="Vrijeme:"
+                               style="-fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 50;"/>
+                        <Label fx:id="lblMoveTime" text="--:--:--"
+                               style="-fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Chat Panel -->
+                <VBox spacing="10" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: #ecf0f1; -fx-background-radius: 5; -fx-padding: 10;">
+
+                    <Label text="💬 CHAT" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                    <Separator/>
+
+                    <!-- Chat Messages -->
+                    <ScrollPane fx:id="chatScrollPane" VBox.vgrow="ALWAYS"
+                                fitToWidth="true"
+                                style="-fx-background: white; -fx-background-color: white;">
+                        <VBox fx:id="chatBox" spacing="5"
+                              style="-fx-background-color: white;">
+                            <padding>
+                                <Insets top="5" right="5" bottom="5" left="5"/>
+                            </padding>
+                        </VBox>
+                    </ScrollPane>
+
+                    <!-- Chat Input -->
+                    <HBox spacing="5">
+                        <TextField fx:id="txtChatInput"
+                                   promptText="Unesite poruku..."
+                                   HBox.hgrow="ALWAYS"
+                                   onAction="#handleSendChat"/>
+
+                        <Button text="Pošalji" onAction="#handleSendChat"
+                                styleClass="primary-button"/>
+                    </HBox>
+                </VBox> <!-- Closing tag za Chat Panel VBox -->
+            </VBox> <!-- Closing tag za RIGHT container VBox -->
+        </HBox>
+    </center>
+
+    <!-- BOTTOM - Actions -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="10" bottom="10"/>
+            </padding>
+
+            <Button text="Napusti igru" onAction="#handleQuit"
+                    styleClass="secondary-button"
+                    prefWidth="120"/>
+        </HBox>
+    </bottom>
+</BorderPane>

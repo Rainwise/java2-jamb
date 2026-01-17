@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="hr.ipicek.jamb.controller.JoinGameController"
+            stylesheets="@../style/menu.css"
+            prefWidth="700" prefHeight="600">
+
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="30" bottom="20"/>
+            </padding>
+
+            <Label text="PRIDRUŽI SE IGRI" styleClass="title">
+                <font>
+                    <Font name="System Bold" size="28"/>
+                </font>
+            </Label>
+
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="btnRefresh" text="🔄 Osvježi"
+                        onAction="#handleRefresh"
+                        styleClass="secondary-button"/>
+
+                <Label fx:id="lblStatus" text="Učitavanje..."
+                       style="-fx-font-style: italic; -fx-text-fill: #666;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets left="30" right="30" top="10" bottom="20"/>
+            </padding>
+
+            <!-- Games Table -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <Label text="Dostupne igre:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                <TableView fx:id="tblGames" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colHost" text="Host" prefWidth="150"/>
+                        <TableColumn fx:id="colPlayers" text="Igrači" prefWidth="80"/>
+                        <TableColumn fx:id="colAddress" text="Server Adresa" prefWidth="180"/>
+                        <TableColumn fx:id="colPort" text="Port" prefWidth="80"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Nema dostupnih igara" style="-fx-font-style: italic;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <!-- Selected Game Info -->
+            <VBox spacing="10"
+                  style="-fx-background-color: #f0f0f0; -fx-background-radius: 5; -fx-padding: 15;">
+                <Label text="Odabrana igra:" style="-fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblSelectedGame" text="Nije odabrana"
+                       style="-fx-font-size: 14px;"/>
+            </VBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="15">
+            <padding>
+                <Insets top="20" bottom="20"/>
+            </padding>
+
+            <Button fx:id="btnJoin" text="Pridruži se"
+                    onAction="#handleJoin"
+                    styleClass="primary-button"
+                    prefWidth="150" prefHeight="40"
+                    disable="true">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </Button>
+
+            <Button text="Nazad" onAction="#handleBack"
+                    styleClass="secondary-button"
+                    prefWidth="100"/>
+        </HBox>
+    </bottom>
+</BorderPane>

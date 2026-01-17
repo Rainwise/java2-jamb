@@ -2,7 +2,9 @@ package hr.ipicek.jamb.util;
 
 import hr.ipicek.jamb.model.GameEngine;
 import hr.ipicek.jamb.model.ScoreCategory;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -14,18 +16,20 @@ public final class DialogUtils {
     private DialogUtils() {}
 
     public static void showScoreConfirmation(GameEngine engine, ScoreCategory category) {
-        int potentialScore = engine.previewScore(category);
-        int rolls = engine.rollCountProperty().get();
+        if (showScoreConfirmation(category, engine.previewScore(category), engine.rollCountProperty().get())) {
+            engine.applyScore(category);
+        }
+    }
 
+
+    public static boolean showScoreConfirmation(ScoreCategory category, int potentialScore, int rolls) {
         var alert = getScoreAlert(category, rolls, potentialScore);
         ButtonType yes = new ButtonType("Upiši", ButtonBar.ButtonData.OK_DONE);
         ButtonType no = new ButtonType("Odustani", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(yes, no);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == yes) {
-            engine.applyScore(category);
-        }
+        return result.isPresent() && result.get() == yes;
     }
 
     private static Alert getScoreAlert(ScoreCategory category, int rolls, int potentialScore) {
@@ -109,5 +113,27 @@ public final class DialogUtils {
         alert.setHeaderText("Greška");
         alert.setContentText(message + (e != null ? ("\n\nDetalji: " + e.getMessage()) : ""));
         alert.showAndWait();
+    }
+
+    public static void showError(String title, String message) {
+        showError(title, message, null);
+    }
+
+    public static void showError(String message) {
+        showError("Greška", message, null);
+    }
+
+    public static boolean showConfirmation(String title, String message) {
+        return showConfirmation(title, null, message);
+    }
+
+    public static boolean showConfirmation(String title, String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 }
