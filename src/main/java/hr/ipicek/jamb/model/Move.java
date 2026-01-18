@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
-// jedan potez unutar igre, serijaliziran za logger
+/**
+ * Represents a single move/action in the game.
+ * Serializable for logging to binary file.
+ */
 public class Move implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,6 +64,27 @@ public class Move implements Serializable {
         this.score = 0;
         this.diceValues = "Kockica " + (dieIndex + 1) + ": " + (held ? "držana" : "puštena");
         this.timestamp = LocalDateTime.now();
+    }
+
+    // Constructor for MoveDisplay (from XML)
+    // Simple constructor that takes pre-formatted description and timestamp
+    public Move(String playerName, String description, String formattedTime) {
+        this.playerName = playerName;
+        this.type = MoveType.ROLL_DICE; // Default, samo za display
+        this.category = null;
+        this.score = 0;
+        this.diceValues = description;
+
+        // Parse time string to LocalDateTime (or use now() if parsing fails)
+        LocalDateTime parsedTimestamp;
+        try {
+            java.time.LocalTime time = java.time.LocalTime.parse(formattedTime,
+                    DateTimeFormatter.ofPattern("HH:mm:ss"));
+            parsedTimestamp = LocalDateTime.of(java.time.LocalDate.now(), time);
+        } catch (Exception e) {
+            parsedTimestamp = LocalDateTime.now();
+        }
+        this.timestamp = parsedTimestamp;  // Assign once to final field
     }
 
     // Getters

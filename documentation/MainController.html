@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MainController - Documentation</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+h2 {
+    color: #34495e;
+    margin-top: 30px;
+    border-bottom: 2px solid #ecf0f1;
+    padding-bottom: 5px;
+}
+.package {
+    color: #7f8c8d;
+    font-size: 14px;
+}
+.modifiers {
+    color: #e74c3c;
+    font-weight: bold;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+th {
+    background: #3498db;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+tr:hover {
+    background: #f8f9fa;
+}
+.footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ecf0f1;
+    color: #95a5a6;
+    font-size: 12px;
+    text-align: center;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+li {
+    padding: 8px;
+    border-bottom: 1px solid #ecf0f1;
+}
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+a:hover {
+    text-decoration: underline;
+}
+.tag {
+    background: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    margin-left: 5px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>MainController</h1>
+<p class="package">Package: hr.ipicek.jamb.controller</p>
+<p class="modifiers">public class </p>
+<h2>Fields (15)</h2>
+<table>
+<tr><th>Modifiers</th><th>Type</th><th>Name</th></tr>
+<tr><td>private</td><td>Label</td><td>lblPlayer</td></tr>
+<tr><td>private</td><td>Label</td><td>lblRolls</td></tr>
+<tr><td>private</td><td>Label</td><td>lblTotal</td></tr>
+<tr><td>private</td><td>Button</td><td>btnRoll</td></tr>
+<tr><td>private</td><td>Button</td><td>btnSaveGame</td></tr>
+<tr><td>private</td><td>TableView</td><td>tblScores</td></tr>
+<tr><td>private</td><td>TableColumn</td><td>colCat</td></tr>
+<tr><td>private</td><td>TableColumn</td><td>colP1</td></tr>
+<tr><td>private</td><td>TableColumn</td><td>colP2</td></tr>
+<tr><td>private</td><td>ImageView</td><td>imgDie1</td></tr>
+<tr><td>private</td><td>ImageView</td><td>imgDie2</td></tr>
+<tr><td>private</td><td>ImageView</td><td>imgDie3</td></tr>
+<tr><td>private</td><td>ImageView</td><td>imgDie4</td></tr>
+<tr><td>private</td><td>ImageView</td><td>imgDie5</td></tr>
+<tr><td>private</td><td>GameEngine</td><td>engine</td></tr>
+</table>
+<h2>Constructors (1)</h2>
+<table>
+<tr><th>Modifiers</th><th>Parameters</th></tr>
+<tr><td>public</td><td>()</td></tr>
+</table>
+<h2>Methods (18)</h2>
+<table>
+<tr><th>Modifiers</th><th>Return Type</th><th>Name</th><th>Parameters</th></tr>
+<tr><td>public</td><td>void</td><td><strong>init</strong></td><td>(GameEngine)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>bindDie</strong></td><td>(ImageView, Die, StringProperty)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>updateImage</strong></td><td>(ImageView, String)</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$init$4</strong></td><td>(GameEngine, ObservableValue, Boolean, Boolean)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>lambda$init$3</strong></td><td>(ObservableValue, Number, Number)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>lambda$init$2</strong></td><td>(GameEngine, ActionEvent)</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$init$1</strong></td><td>(GameEngine, ActionEvent)</td></tr>
+<tr><td>private static</td><td>String</td><td><strong>lambda$init$0</strong></td><td>(GameEngine)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>refreshScoreTable</strong></td><td>()</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$bindDie$9</strong></td><td>(ImageView, MouseEvent)</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$bindDie$8</strong></td><td>(ImageView, MouseEvent)</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$bindDie$7</strong></td><td>(Die, MouseEvent)</td></tr>
+<tr><td>private static</td><td>void</td><td><strong>lambda$bindDie$6</strong></td><td>(ImageView, ObservableValue, Boolean, Boolean)</td></tr>
+<tr><td>private</td><td>void</td><td><strong>lambda$bindDie$5</strong></td><td>(ImageView, ObservableValue, String, String)</td></tr>
+<tr><td>private static</td><td>String</td><td><strong>lambda$refreshScoreTable$13</strong></td><td>(ScoreSheet)</td></tr>
+<tr><td>private static</td><td>ObservableValue</td><td><strong>lambda$refreshScoreTable$12</strong></td><td>(CellDataFeatures)</td></tr>
+<tr><td>private static</td><td>ObservableValue</td><td><strong>lambda$refreshScoreTable$11</strong></td><td>(CellDataFeatures)</td></tr>
+<tr><td>private static</td><td>ObservableValue</td><td><strong>lambda$refreshScoreTable$10</strong></td><td>(CellDataFeatures)</td></tr>
+</table>
+<p class="footer">Generated: 2026-01-17 14:05:06</p>
+</div>
+</body>
+</html>

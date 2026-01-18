@@ -2,6 +2,7 @@ package hr.ipicek.jamb.network;
 
 import hr.ipicek.jamb.logging.MoveDisplay;
 import hr.ipicek.jamb.logging.MoveLogger;
+import hr.ipicek.jamb.logging.XMLMoveLogger;
 import hr.ipicek.jamb.model.*;
 import hr.ipicek.jamb.network.protocol.GameMessage;
 import hr.ipicek.jamb.network.protocol.GameStateUpdate;
@@ -21,7 +22,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
- // Wrapper oko GameEngine-a koji dodaje mrežnu funkcionalnost. Upravlja sinkronizacijom stanja igre preko mreže.
+// Wrapper oko GameEngine-a koji dodaje mrežnu funkcionalnost. Upravlja sinkronizacijom stanja igre preko mreže.
 public class NetworkGameEngine {
 
     private GameEngine gameEngine;
@@ -35,6 +36,7 @@ public class NetworkGameEngine {
     // Move logging komponente
     private MoveLogger moveLogger;
     private MoveDisplay moveDisplay;
+    private XMLMoveLogger xmlMoveLogger;
     private String gameId;
 
     // Properties za UI binding
@@ -61,7 +63,7 @@ public class NetworkGameEngine {
     private final BooleanProperty isLocalPlayerTurn = new SimpleBooleanProperty(false);
     private final List<String> playerNames = new ArrayList<>();
 
-   // host
+    // host
     public NetworkGameEngine(String localPlayerName, int port) {
         this.isHost = true;
         this.localPlayerName = localPlayerName;
@@ -426,7 +428,7 @@ public class NetworkGameEngine {
 
 
 
-     // Pokreće igru (samo host može)
+    // Pokreće igru (samo host može)
     public void startGame() {
         if (!isHost) {
             updateStatus("Samo host može pokrenuti igru!");
@@ -609,13 +611,15 @@ public class NetworkGameEngine {
     private void initializeMoveLogging() {
         gameId = "game_" + System.currentTimeMillis();
 
-        moveLogger = new MoveLogger(gameId);
-        moveLogger.start();
+//        moveLogger = new MoveLogger(gameId);
+//        moveLogger.start();
+        xmlMoveLogger = new XMLMoveLogger(gameId);
+        xmlMoveLogger.start();
 
         moveDisplay = new MoveDisplay(
-                moveLogger.getLogFile(),
-                moveLogger.getFileLock(),
-                2  // Interval 2 sekunde
+                xmlMoveLogger.getXmlFile(),
+                xmlMoveLogger.getFileLock(),
+                2
         );
         moveDisplay.start();
 
@@ -623,8 +627,10 @@ public class NetworkGameEngine {
     }
 
     private void logMove(Move move) {
-        if (moveLogger != null && isHost) {
-            moveLogger.logMove(move);
+        if (isHost) {
+            if (xmlMoveLogger != null) {
+                xmlMoveLogger.logMove(move);  // XML logging!
+            }
         }
     }
 
@@ -709,11 +715,7 @@ public class NetworkGameEngine {
         this.onTurnChangeCallback = callback;
     }
 
-    // ===== GAME STATE MANAGEMENT =====
 
-    /**
-     * Kreira GameStateUpdate sa trenutnim stanjem igre (samo host)
-     */
     private GameStateUpdate createGameStateUpdate() {
         if (!isHost || gameEngine == null) {
             return null;
@@ -769,7 +771,7 @@ public class NetworkGameEngine {
     }
 
 
-     // Getteri za client-side observables
+    // Getteri za client-side observables
     public ObservableList<Integer> getClientDiceValues() {
         return clientDiceValues;
     }

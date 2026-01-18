@@ -3,6 +3,7 @@ module hr.ipicek.jamb {
     requires javafx.fxml;
     requires java.rmi;
     requires java.naming;
+    requires java.xml;
 
     opens hr.ipicek.jamb.controller to javafx.fxml;
     exports hr.ipicek.jamb;

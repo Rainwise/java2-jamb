@@ -6,15 +6,20 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+// XML DOM API imports
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import java.io.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-
-// poseban thread koji periodicki cita potez iz binarne datoteke i stavlja ga na client ui
 public class MoveDisplay extends Thread {
 
-    private final File logFile;
+    private final File xmlFile;  // Changed: now XML file!
     private final ReentrantLock fileLock;
     private final int intervalSeconds;
     private volatile boolean running;
@@ -24,16 +29,17 @@ public class MoveDisplay extends Thread {
     private final StringProperty lastMoveAction = new SimpleStringProperty("Čekanje na potez...");
     private final StringProperty lastMoveTime = new SimpleStringProperty("--:--:--");
 
-    public MoveDisplay(File logFile, ReentrantLock fileLock, int intervalSeconds) {
-        this.logFile = logFile;
+    public MoveDisplay(File xmlFile, ReentrantLock fileLock, int intervalSeconds) {
+        this.xmlFile = xmlFile;
         this.fileLock = fileLock;
         this.intervalSeconds = intervalSeconds;
         this.running = true;
 
-        setName("MoveDisplay");
+        setName("MoveDisplay-XML");
         setDaemon(true);
 
-        Logger.info("MoveDisplay", "Inicijaliziran, interval: " + intervalSeconds + "s");
+        Logger.info("MoveDisplay", "Initialized (XML mode), interval: " + intervalSeconds + "s");
+        Logger.info("MoveDisplay", "Reading from: " + xmlFile.getName());
     }
 
     @Override
@@ -58,40 +64,65 @@ public class MoveDisplay extends Thread {
         Logger.info("MoveDisplay", "Nit završila");
     }
 
+
     private void readAndDisplayLastMove() {
-        // Acquire lock to synchronize with MoveLogger
         fileLock.lock();
         try {
-            if (!logFile.exists() || logFile.length() == 0) {
+            if (!xmlFile.exists() || xmlFile.length() == 0) {
                 updateUIProperties(null);
                 return;
             }
 
-            Move lastMove = null;
+            Move lastMove = readLastMoveFromXML();
 
-            // Read all moves to get the last one
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(logFile))) {
-                while (true) {
-                    try {
-                        lastMove = (Move) ois.readObject();
-                    } catch (EOFException e) {
-                        break; // End of file - lastMove now contains the last move
-                    }
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                Logger.error("MoveDisplay", "Greška pri čitanju move file", e);
-                return;
-            }
-
-            // Update UI on JavaFX thread
             if (lastMove != null) {
                 updateUIProperties(lastMove);
-                Logger.debug("MoveDisplay", "Prikazan potez: " + lastMove);
+                Logger.debug("MoveDisplay", "Displayed move from XML: " + lastMove);
             }
 
         } finally {
             fileLock.unlock();
         }
+    }
+
+    private Move readLastMoveFromXML() {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+
+            NodeList moveNodes = doc.getElementsByTagName("GameMove");
+
+            if (moveNodes.getLength() == 0) {
+                Logger.debug("MoveDisplay", "XML is empty");
+                return null;
+            }
+
+            // Get LAST element
+            Element lastMoveElement = (Element) moveNodes.item(moveNodes.getLength() - 1);
+
+            // Extract data
+            String playerName = getElementText(lastMoveElement, "PlayerName");
+            String details = getElementText(lastMoveElement, "Details");
+            String timestamp = getElementText(lastMoveElement, "Timestamp");
+
+            Logger.debug("MoveDisplay", String.format("Read: %s - %s - %s", playerName, details, timestamp));
+
+            return new Move(playerName, details, timestamp);
+
+        } catch (Exception e) {
+            Logger.error("MoveDisplay", "Error reading XML: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private String getElementText(Element parent, String tagName) {
+        NodeList nodes = parent.getElementsByTagName(tagName);
+        if (nodes.getLength() > 0) {
+            return nodes.item(0).getTextContent();
+        }
+        return "";
     }
 
     // ažurira java fx ui

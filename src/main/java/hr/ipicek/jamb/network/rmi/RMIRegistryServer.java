@@ -1,5 +1,6 @@
 package hr.ipicek.jamb.network.rmi;
 
+import hr.ipicek.jamb.util.NetworkConstants;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -8,14 +9,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
+
  // RMI Registry server koji pokreće i registrira RMI servise.
  // Koristi JNDI naming za registraciju servisa.
 public class RMIRegistryServer {
-
-    public static final String LOBBY_SERVICE_NAME = "JambLobbyService";
-    public static final String CHAT_SERVICE_NAME = "JambChatService";
-    public static final int DEFAULT_RMI_PORT = 1099;
-
     private final int port;
     private Registry registry;
     private LobbyServiceImpl lobbyService;
@@ -24,7 +21,7 @@ public class RMIRegistryServer {
     private boolean running = false;
 
     public RMIRegistryServer() {
-        this(DEFAULT_RMI_PORT);
+        this(NetworkConstants.RMI_REGISTRY_PORT);
     }
 
     public RMIRegistryServer(int port) {
@@ -47,13 +44,13 @@ public class RMIRegistryServer {
 
             // Kreiraj i registriraj LobbyService
             lobbyService = new LobbyServiceImpl();
-            registry.rebind(LOBBY_SERVICE_NAME, lobbyService);
-            System.out.println("[RMIRegistry] " + LOBBY_SERVICE_NAME + " registriran");
+            registry.rebind(NetworkConstants.RMI_LOBBY_SERVICE, lobbyService);
+            System.out.println("[RMIRegistry] " + NetworkConstants.RMI_LOBBY_SERVICE + " registriran");
 
             // Kreiraj i registriraj ChatService
             chatService = new ChatServiceImpl();
-            registry.rebind(CHAT_SERVICE_NAME, chatService);
-            System.out.println("[RMIRegistry] " + CHAT_SERVICE_NAME + " registriran");
+            registry.rebind(NetworkConstants.RMI_CHAT_SERVICE, chatService);
+            System.out.println("[RMIRegistry] " + NetworkConstants.RMI_CHAT_SERVICE + " registriran");
 
             running = true;
 
@@ -118,8 +115,8 @@ public class RMIRegistryServer {
         // Unbind servise
         try {
             if (registry != null) {
-                registry.unbind(LOBBY_SERVICE_NAME);
-                registry.unbind(CHAT_SERVICE_NAME);
+                registry.unbind(NetworkConstants.RMI_LOBBY_SERVICE);
+                registry.unbind(NetworkConstants.RMI_CHAT_SERVICE);
                 System.out.println("[RMIRegistry] Servisi deregistrirani");
             }
         } catch (Exception e) {
@@ -161,7 +158,7 @@ public class RMIRegistryServer {
 
     // main metoda za pokretanje servera
     public static void main(String[] args) {
-        int port = DEFAULT_RMI_PORT;
+        int port = NetworkConstants.RMI_REGISTRY_PORT;
 
         if (args.length > 0) {
             try {

@@ -1,5 +1,6 @@
 package hr.ipicek.jamb.network.rmi;
 import hr.ipicek.jamb.util.Logger;
+import hr.ipicek.jamb.util.NetworkConstants;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -21,7 +22,7 @@ public class RMIClient {
     }
 
     public RMIClient(String host) {
-        this(host, RMIRegistryServer.DEFAULT_RMI_PORT);
+        this(host, NetworkConstants.RMI_REGISTRY_PORT);
     }
 
     // povezivanje na rmi registry
@@ -37,7 +38,7 @@ public class RMIClient {
             if (registry == null) {
                 connect();
             }
-            lobbyService = (LobbyService) registry.lookup(RMIRegistryServer.LOBBY_SERVICE_NAME);
+            lobbyService = (LobbyService) registry.lookup(NetworkConstants.RMI_LOBBY_SERVICE);
             System.out.println("[RMIClient] LobbyService lookup uspješan");
         }
         return lobbyService;
@@ -49,7 +50,7 @@ public class RMIClient {
             if (registry == null) {
                 connect();
             }
-            chatService = (ChatService) registry.lookup(RMIRegistryServer.CHAT_SERVICE_NAME);
+            chatService = (ChatService) registry.lookup(NetworkConstants.RMI_CHAT_SERVICE);
             System.out.println("[RMIClient] ChatService lookup uspješan");
         }
         return chatService;

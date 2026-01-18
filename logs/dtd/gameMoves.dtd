@@ -1,0 +1,6 @@
+<!ELEMENT GameMoves (GameMove*)>
+        <!ELEMENT GameMove (PlayerName, Action, Details, Timestamp)>
+        <!ELEMENT PlayerName (#PCDATA)>
+        <!ELEMENT Action (#PCDATA)>
+        <!ELEMENT Details (#PCDATA)>
+        <!ELEMENT Timestamp (#PCDATA)>

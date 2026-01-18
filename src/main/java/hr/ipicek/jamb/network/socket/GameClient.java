@@ -2,6 +2,7 @@ package hr.ipicek.jamb.network.socket;
 
 import hr.ipicek.jamb.network.protocol.GameMessage;
 import hr.ipicek.jamb.util.Logger;
+import hr.ipicek.jamb.util.NetworkConstants;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.util.function.Consumer;
  // TCP klijent koji se povezuje na GameServer, prima poruke od njega
 public class GameClient extends Thread {
 
-    private static final int DEFAULT_PORT = 8888;
+    private static final int DEFAULT_PORT = NetworkConstants.DEFAULT_GAME_SERVER_PORT;
 
     private final String serverHost;
     private final int serverPort;

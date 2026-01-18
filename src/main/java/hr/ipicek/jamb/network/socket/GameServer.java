@@ -125,7 +125,6 @@ public class GameServer extends Thread {
 
 
      // Callback kad server primi poruku od klijenta
-
     void onMessageReceived(GameMessage message, ClientHandler sender) {
         Logger.Server.debug("Primljena poruka: " + message.getType() + " od " + message.getSenderName());
 

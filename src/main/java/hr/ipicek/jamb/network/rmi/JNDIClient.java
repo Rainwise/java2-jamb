@@ -1,6 +1,7 @@
 package hr.ipicek.jamb.network.rmi;
 
 import hr.ipicek.jamb.util.Logger;
+import hr.ipicek.jamb.util.NetworkConstants;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -24,7 +25,7 @@ public class JNDIClient {
 
 
     public JNDIClient(String host) {
-        this(host, RMIRegistryServer.DEFAULT_RMI_PORT);
+        this(host, NetworkConstants.RMI_REGISTRY_PORT);
     }
 
 
@@ -51,7 +52,7 @@ public class JNDIClient {
             }
 
             // jndi lookup sa RMI url
-            String jndiName = RMIRegistryServer.LOBBY_SERVICE_NAME;
+            String jndiName = NetworkConstants.RMI_LOBBY_SERVICE;
             Logger.Network.info("JNDI: Lookup LobbyService (" + jndiName + ")...");
 
             lobbyService = (LobbyService) context.lookup(jndiName);
@@ -69,7 +70,7 @@ public class JNDIClient {
                 connect();
             }
 
-            String jndiName = RMIRegistryServer.CHAT_SERVICE_NAME;
+            String jndiName = NetworkConstants.RMI_CHAT_SERVICE;
             Logger.Network.info("JNDI: Lookup ChatService (" + jndiName + ")...");
 
             chatService = (ChatService) context.lookup(jndiName);

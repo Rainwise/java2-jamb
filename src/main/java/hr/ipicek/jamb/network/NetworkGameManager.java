@@ -1,5 +1,5 @@
 package hr.ipicek.jamb.network;
-
+import hr.ipicek.jamb.util.NetworkConstants;
 import hr.ipicek.jamb.network.rmi.*;
 import javafx.application.Platform;
 
@@ -49,7 +49,7 @@ public class NetworkGameManager {
     }
 
     public NetworkGameManager(String rmiHost) {
-        this(rmiHost, RMIRegistryServer.DEFAULT_RMI_PORT);
+        this(rmiHost, NetworkConstants.RMI_REGISTRY_PORT);
     }
 
 
